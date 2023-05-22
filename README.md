@@ -1,1 +1,1 @@
-# spring-cloud-e-commerce
+# spring-cloud-ecommerce
