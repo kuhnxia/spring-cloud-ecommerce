@@ -1,7 +1,6 @@
 package org.kun.springcloudecommerce.productservice.service;
 
 import lombok.extern.log4j.Log4j2;
-import org.apache.logging.log4j.util.StringBuilders;
 import org.kun.springcloudecommerce.productservice.entity.Product;
 import org.kun.springcloudecommerce.productservice.exception.ProductServiceCustomException;
 import org.kun.springcloudecommerce.productservice.model.ProductRequest;
