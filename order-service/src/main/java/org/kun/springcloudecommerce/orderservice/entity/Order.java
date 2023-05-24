@@ -1,0 +1,32 @@
+package org.kun.springcloudecommerce.orderservice.entity;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.lang.model.element.Name;
+import javax.persistence.*;
+import java.time.Instant;
+
+@Entity
+@Data
+@Table(name = "ORDER_DETAILS")
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class Order {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    @Column(name = "PRODUCT_ID")
+    private long productId;
+    @Column(name = "QUANTITY")
+    private long quantity;
+    @Column(name = "ORDER_DATE")
+    private Instant orderDate;
+    @Column(name = "ORDER_STATUS")
+    private String orderStatus;
+    @Column(name = "TOTAL_AMOUNT")
+    private long amount;
+}
