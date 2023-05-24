@@ -1,13 +1,20 @@
 package org.kun.springcloudecommerce.productservice.service;
 
 import lombok.extern.log4j.Log4j2;
+import org.apache.logging.log4j.util.StringBuilders;
 import org.kun.springcloudecommerce.productservice.entity.Product;
+import org.kun.springcloudecommerce.productservice.exception.ProductServiceCustomException;
 import org.kun.springcloudecommerce.productservice.model.ProductRequest;
 import org.kun.springcloudecommerce.productservice.model.ProductResponse;
 import org.kun.springcloudecommerce.productservice.repository.ProductRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.beans.BeanUtils.*;
 
@@ -40,10 +47,27 @@ public class ProductServiceImpl implements ProductService{
 
         Product product = productRepository
                 .findById(productId)
-                .orElseThrow(()->new RuntimeException("Product with given id not found"));
+                .orElseThrow(()->new ProductServiceCustomException("Product with given id not found",
+                        HttpStatus.NOT_FOUND));
 
         ProductResponse productResponse = new ProductResponse();
         copyProperties(product, productResponse);
         return  productResponse;
+    }
+
+    @Override
+    public ResponseEntity<String> deleteAllProduct() {
+        productRepository.deleteAll();
+        return new ResponseEntity<>("All products are deleted", HttpStatus.OK);
+    }
+
+    @Override
+    public List<ProductResponse> getAllProduct() {
+
+        return productRepository.findAll().stream().map(product -> {
+            ProductResponse productResponse = new ProductResponse();
+            BeanUtils.copyProperties(product, productResponse);
+            return productResponse;
+        }).collect(Collectors.toList());
     }
 }
