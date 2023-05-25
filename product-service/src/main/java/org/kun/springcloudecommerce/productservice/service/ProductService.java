@@ -14,4 +14,7 @@ public interface ProductService {
     ResponseEntity<String> deleteAllProduct();
 
     List<ProductResponse> getAllProduct();
+
+    void reduceQuantity(long productId, long quantity);
+
 }

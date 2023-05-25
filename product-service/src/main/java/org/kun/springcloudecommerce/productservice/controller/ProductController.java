@@ -37,4 +37,13 @@ public class ProductController {
     public ResponseEntity<String> deleteAllProduct(){
         return productService.deleteAllProduct();
     }
+
+    @PutMapping("/reduceQuantity/{id}")
+    public ResponseEntity<Void> reduceQuantity(
+            @PathVariable("id") long productId,
+            @RequestParam long quantity
+    ){
+        productService.reduceQuantity(productId, quantity);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
