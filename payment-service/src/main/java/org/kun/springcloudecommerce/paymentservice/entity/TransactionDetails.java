@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.kun.springcloudecommerce.paymentservice.model.PaymentMode;
 
 import javax.persistence.*;
 import java.time.Instant;
