@@ -2,7 +2,9 @@ package org.kun.springcloudecommerce.orderservice.service;
 
 import lombok.extern.log4j.Log4j2;
 import org.kun.springcloudecommerce.orderservice.entity.Order;
+import org.kun.springcloudecommerce.orderservice.external.client.PaymentService;
 import org.kun.springcloudecommerce.orderservice.external.client.ProductService;
+import org.kun.springcloudecommerce.orderservice.external.request.PaymentRequest;
 import org.kun.springcloudecommerce.orderservice.model.OrderRequest;
 import org.kun.springcloudecommerce.orderservice.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,8 @@ public class OrderServiceImpl implements OrderService{
     private OrderRepository orderRepository;
     @Autowired
     private ProductService productService;
+    @Autowired
+    private PaymentService paymentService;
 
 
     @Override
@@ -34,9 +38,31 @@ public class OrderServiceImpl implements OrderService{
                 .quantity(orderRequest.getQuantity())
                 .build();
         order = orderRepository.save(order);
+
+        log.info("Calling payment service to complete the payment.");
+        PaymentRequest paymentRequest = PaymentRequest.builder()
+                .paymentMode(orderRequest.getPaymentMode())
+                .orderId(order.getId())
+                .amount(order.getAmount())
+                .build();
+
+        String orderStatus;
+        try {
+            log.info("Payment done successfully.");
+            paymentService.doPayment(paymentRequest);
+            orderStatus = "PLACED";
+
+        } catch (Exception e) {
+            log.info("Error occurred in payment");
+            orderStatus = "PAYMENT_FAILED";
+        }
+
+        order.setOrderStatus(orderStatus);
+        orderRepository.save(order);;
+        
+
+
         log.info("Order placed successfully with order id: {}", order.getId());
-        //Product Service -> Block Products(Reduce the Quantity)
-        //Payment Service -> Payments -> Success -> Complete, else Cancelled.
         return order.getId();
     }
 }
