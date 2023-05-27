@@ -2,12 +2,15 @@ package org.kun.springcloudecommerce.orderservice.service;
 
 import lombok.extern.log4j.Log4j2;
 import org.kun.springcloudecommerce.orderservice.entity.Order;
+import org.kun.springcloudecommerce.orderservice.exception.OrderServiceCustomException;
 import org.kun.springcloudecommerce.orderservice.external.client.PaymentService;
 import org.kun.springcloudecommerce.orderservice.external.client.ProductService;
 import org.kun.springcloudecommerce.orderservice.external.request.PaymentRequest;
 import org.kun.springcloudecommerce.orderservice.model.OrderRequest;
+import org.kun.springcloudecommerce.orderservice.model.OrderResponse;
 import org.kun.springcloudecommerce.orderservice.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -64,5 +67,22 @@ public class OrderServiceImpl implements OrderService{
 
         log.info("Order placed successfully with order id: {}", order.getId());
         return order.getId();
+    }
+
+    @Override
+    public OrderResponse getOrderDetails(long orderId) {
+        log.info("Get order details for order id: {}", orderId);
+
+        Order order = orderRepository.findById(orderId).orElseThrow(
+                () -> new OrderServiceCustomException("The order with given id not found", "ORDER_NOT_FOUND", HttpStatus.NOT_FOUND)
+        );
+
+        return OrderResponse.builder()
+                .amount(order.getAmount())
+                .orderDate(order.getOrderDate())
+                .orderId(orderId)
+                .orderStatus(order.getOrderStatus())
+                .build();
+
     }
 }
