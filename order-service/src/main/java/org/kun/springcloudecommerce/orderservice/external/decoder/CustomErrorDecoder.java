@@ -6,6 +6,7 @@ import feign.codec.ErrorDecoder;
 import lombok.extern.log4j.Log4j2;
 import org.kun.springcloudecommerce.orderservice.exception.OrderServiceCustomException;
 import org.kun.springcloudecommerce.orderservice.external.response.ErrorResponse;
+import org.springframework.http.HttpStatus;
 
 import java.io.IOException;
 
@@ -25,7 +26,7 @@ public class CustomErrorDecoder implements ErrorDecoder {
             return new OrderServiceCustomException(
                     errorResponse.getErrorMessage(),
                     errorResponse.getErrorCode(),
-                    response.status()
+                    HttpStatus.valueOf(response.status())
             );
         } catch (IOException e) {
             throw new RuntimeException(e);

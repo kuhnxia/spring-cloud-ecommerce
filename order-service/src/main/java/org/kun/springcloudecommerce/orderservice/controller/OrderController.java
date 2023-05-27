@@ -2,6 +2,7 @@ package org.kun.springcloudecommerce.orderservice.controller;
 
 import lombok.extern.log4j.Log4j2;
 import org.kun.springcloudecommerce.orderservice.model.OrderRequest;
+import org.kun.springcloudecommerce.orderservice.model.OrderResponse;
 import org.kun.springcloudecommerce.orderservice.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,5 +21,10 @@ public class OrderController {
         long orderId = orderService.placeOrder(orderRequest);
         log.info("Order Id: {}", orderId);
         return new ResponseEntity<>(orderId, HttpStatus.OK);
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<OrderResponse> getOrderDetails(@PathVariable(name = "id") long orderId){
+        OrderResponse orderResponse = orderService.getOrderDetails(orderId);
+        return new ResponseEntity<>(orderResponse, HttpStatus.OK);
     }
 }

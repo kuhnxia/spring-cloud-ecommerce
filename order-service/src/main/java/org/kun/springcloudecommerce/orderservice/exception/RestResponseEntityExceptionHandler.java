@@ -1,6 +1,5 @@
 package org.kun.springcloudecommerce.orderservice.exception;
 import org.kun.springcloudecommerce.orderservice.external.response.ErrorResponse;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -13,7 +12,7 @@ public class RestResponseEntityExceptionHandler
     public ResponseEntity<ErrorResponse> handleOrderServiceCustomException(OrderServiceCustomException exception){
         return new ResponseEntity<>(
                 new ErrorResponse(exception.getErrorCode(), exception.getMessage()),
-                HttpStatus.valueOf(exception.getStatus())
+                exception.getStatus()
         );
     }
 

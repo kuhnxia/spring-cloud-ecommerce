@@ -2,13 +2,19 @@ package org.kun.springcloudecommerce.orderservice.service;
 
 import lombok.extern.log4j.Log4j2;
 import org.kun.springcloudecommerce.orderservice.entity.Order;
+import org.kun.springcloudecommerce.orderservice.exception.OrderServiceCustomException;
 import org.kun.springcloudecommerce.orderservice.external.client.PaymentService;
 import org.kun.springcloudecommerce.orderservice.external.client.ProductService;
 import org.kun.springcloudecommerce.orderservice.external.request.PaymentRequest;
+import org.kun.springcloudecommerce.orderservice.external.response.PaymentResponse;
+import org.kun.springcloudecommerce.orderservice.external.response.ProductResponse;
 import org.kun.springcloudecommerce.orderservice.model.OrderRequest;
+import org.kun.springcloudecommerce.orderservice.model.OrderResponse;
 import org.kun.springcloudecommerce.orderservice.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.Instant;
 
@@ -21,6 +27,8 @@ public class OrderServiceImpl implements OrderService{
     private ProductService productService;
     @Autowired
     private PaymentService paymentService;
+    @Autowired
+    private RestTemplate restTemplate;
 
 
     @Override
@@ -58,11 +66,58 @@ public class OrderServiceImpl implements OrderService{
         }
 
         order.setOrderStatus(orderStatus);
-        orderRepository.save(order);;
+        orderRepository.save(order);
         
 
 
         log.info("Order placed successfully with order id: {}", order.getId());
         return order.getId();
+    }
+
+    @Override
+    public OrderResponse getOrderDetails(long orderId) {
+        log.info("Get order details for order id: {}", orderId);
+
+        Order order = orderRepository.findById(orderId).orElseThrow(
+                () -> new OrderServiceCustomException("The order with given id not found", "ORDER_NOT_FOUND", HttpStatus.NOT_FOUND)
+        );
+
+        log.info("Fetch the product information by product id: {}", order.getProductId());
+        ProductResponse productResponse = restTemplate.getForObject(
+                "http://PRODUCT-SERVICE/product/"+ order.getProductId(),
+                ProductResponse.class
+        );
+
+        log.info("Fetch the payment details by order id: {}", order.getId());
+        PaymentResponse paymentResponse = restTemplate.getForObject(
+                "http://PAYMENT-SERVICE/payment/order/" + order.getId(),
+                PaymentResponse.class
+        );
+
+        OrderResponse.ProductDetails productDetails =
+                OrderResponse.ProductDetails.builder()
+                        .productName(productResponse.getName())
+                        .productId(productResponse.getProductId())
+                        .price(productResponse.getPrice())
+                        .build();
+
+        OrderResponse.PaymentDetails paymentDetails =
+                OrderResponse.PaymentDetails.builder()
+                        .paymentId(paymentResponse.getPaymentId())
+                        .paymentStatus(paymentResponse.getStatus())
+                        .paymentDate(paymentResponse.getPaymentDate())
+                        .paymentMode(paymentResponse.getPaymentMode())
+                        .build();
+
+        return OrderResponse.builder()
+                .amount(order.getAmount())
+                .orderDate(order.getOrderDate())
+                .orderId(orderId)
+                .orderStatus(order.getOrderStatus())
+                .quantity(order.getQuantity())
+                .paymentDetails(paymentDetails)
+                .productDetails(productDetails)
+                .build();
+
     }
 }
