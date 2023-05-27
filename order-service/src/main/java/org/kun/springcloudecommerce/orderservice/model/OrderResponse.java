@@ -15,4 +15,28 @@ public class OrderResponse {
     private Instant orderDate;
     private String orderStatus;
     private long amount;
+    private long quantity;
+    private ProductDetails productDetails;
+    private PaymentDetails paymentDetails;
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class ProductDetails {
+        private long productId;
+        private String productName;
+        private long price;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class PaymentDetails {
+        private long paymentId;
+        private String paymentStatus;
+        private PaymentMode paymentMode;
+        private Instant paymentDate;
+    }
 }
