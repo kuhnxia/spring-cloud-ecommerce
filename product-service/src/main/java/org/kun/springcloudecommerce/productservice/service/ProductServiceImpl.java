@@ -78,7 +78,7 @@ public class ProductServiceImpl implements ProductService{
                 ()-> new ProductServiceCustomException("Product with given id not found", "PRODUCT_NOT_FOUND")
         );
 
-        if (product.getQuantity() < quantity){
+        if (product.getQuantity() < quantity || product.getQuantity() == 0){
             throw new ProductServiceCustomException("Product doesn't have sufficient quantity",
                     "INSUFFICIENT_QUANTITY");
         }
