@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.Response;
 import feign.codec.ErrorDecoder;
 import lombok.extern.log4j.Log4j2;
-import org.kun.springcloudecommerce.orderservice.exception.OrderServiceCustomException;
+import org.kun.springcloudecommerce.orderservice.exception.CustomException;
 import org.kun.springcloudecommerce.orderservice.external.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
 
@@ -23,7 +23,7 @@ public class CustomErrorDecoder implements ErrorDecoder {
             ErrorResponse errorResponse = objectMapper.readValue(
                     response.body().asInputStream(), ErrorResponse.class);
             
-            return new OrderServiceCustomException(
+            return new CustomException(
                     errorResponse.getErrorMessage(),
                     errorResponse.getErrorCode(),
                     HttpStatus.valueOf(response.status())

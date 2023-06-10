@@ -2,7 +2,7 @@ package org.kun.springcloudecommerce.orderservice.service;
 
 import lombok.extern.log4j.Log4j2;
 import org.kun.springcloudecommerce.orderservice.entity.Order;
-import org.kun.springcloudecommerce.orderservice.exception.OrderServiceCustomException;
+import org.kun.springcloudecommerce.orderservice.exception.CustomException;
 import org.kun.springcloudecommerce.orderservice.external.client.PaymentService;
 import org.kun.springcloudecommerce.orderservice.external.client.ProductService;
 import org.kun.springcloudecommerce.orderservice.external.request.PaymentRequest;
@@ -79,7 +79,7 @@ public class OrderServiceImpl implements OrderService{
         log.info("Get order details for order id: {}", orderId);
 
         Order order = orderRepository.findById(orderId).orElseThrow(
-                () -> new OrderServiceCustomException("The order with given id not found", "ORDER_NOT_FOUND", HttpStatus.NOT_FOUND)
+                () -> new CustomException("The order with given id not found", "ORDER_NOT_FOUND", HttpStatus.NOT_FOUND)
         );
 
         log.info("Fetch the product information by product id: {}", order.getProductId());
