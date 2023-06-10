@@ -88,4 +88,17 @@ public class ProductServiceImpl implements ProductService{
         log.info("Product quantity updated successfully");
 
     }
+
+    @Override
+    public void increaseQuantity(long productId, long quantity) {
+        log.info("increase quantity {} for Id: {}", quantity, productId);
+
+        Product product = productRepository.findById(productId).orElseThrow(
+                ()-> new ProductServiceCustomException("Product with given id not found", "PRODUCT_NOT_FOUND")
+        );
+
+        product.setQuantity(product.getQuantity()+quantity);
+        productRepository.save(product);
+        log.info("Product quantity updated successfully");
+    }
 }

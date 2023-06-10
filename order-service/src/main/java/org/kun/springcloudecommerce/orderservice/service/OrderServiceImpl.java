@@ -56,9 +56,9 @@ public class OrderServiceImpl implements OrderService{
 
         String orderStatus;
         try {
-            log.info("Payment done successfully.");
             paymentService.doPayment(paymentRequest);
             orderStatus = "PLACED";
+            log.info("Payment done successfully.");
 
         } catch (Exception e) {
             log.info("Error occurred in payment");
