@@ -20,8 +20,8 @@ public class PaymentController {
     }
 
     @GetMapping("/order/{id}")
-    public ResponseEntity<PaymentResponse> getProductByOrderId(@PathVariable("id") long orderId){
-        PaymentResponse paymentResponse = paymentService.getProductByOrderId(orderId);
+    public ResponseEntity<PaymentResponse> getPaymentDetailsByOrderId(@PathVariable("id") long orderId){
+        PaymentResponse paymentResponse = paymentService.getPaymentDetailsByOrderId(orderId);
         return new ResponseEntity<>(paymentResponse, HttpStatus.FOUND);
     }
 }

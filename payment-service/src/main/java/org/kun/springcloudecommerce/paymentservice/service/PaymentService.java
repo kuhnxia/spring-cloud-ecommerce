@@ -6,5 +6,5 @@ import org.kun.springcloudecommerce.paymentservice.model.PaymentResponse;
 public interface PaymentService {
     long doPayment(PaymentRequest paymentRequest);
 
-    PaymentResponse getProductByOrderId(long orderId);
+    PaymentResponse getPaymentDetailsByOrderId(long orderId);
 }
