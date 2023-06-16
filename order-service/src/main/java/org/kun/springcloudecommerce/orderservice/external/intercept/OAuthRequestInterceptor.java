@@ -15,7 +15,7 @@ public class OAuthRequestInterceptor implements RequestInterceptor {
     @Override
     public void apply(RequestTemplate requestTemplate) {
         requestTemplate.header("Authorization",
-                "Bearer" + oAuth2AuthorizedClientManager.
+                "Bearer " + oAuth2AuthorizedClientManager.
                         authorize(OAuth2AuthorizeRequest
                                 .withClientRegistrationId("internal-client")
                                 .principal("internal")
