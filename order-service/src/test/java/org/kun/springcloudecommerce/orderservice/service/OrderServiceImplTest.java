@@ -1,5 +1,6 @@
 package org.kun.springcloudecommerce.orderservice.service;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.kun.springcloudecommerce.orderservice.entity.Order;
@@ -7,6 +8,7 @@ import org.kun.springcloudecommerce.orderservice.external.client.PaymentService;
 import org.kun.springcloudecommerce.orderservice.external.client.ProductService;
 import org.kun.springcloudecommerce.orderservice.external.response.PaymentResponse;
 import org.kun.springcloudecommerce.orderservice.external.response.ProductResponse;
+import org.kun.springcloudecommerce.orderservice.model.OrderResponse;
 import org.kun.springcloudecommerce.orderservice.model.PaymentMode;
 import org.kun.springcloudecommerce.orderservice.repository.OrderRepository;
 import org.mockito.InjectMocks;
@@ -18,6 +20,8 @@ import org.springframework.web.client.RestTemplate;
 import java.time.Instant;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
@@ -56,6 +60,21 @@ public class OrderServiceImplTest {
                 PaymentResponse.class
         )).thenReturn(getMockPaymentResponse());
 
+        OrderResponse orderResponse = orderService.getOrderDetails(1);
+
+
+        verify(orderRepository, times(1)).findById(anyLong());
+        verify(restTemplate, times(1)).getForObject(
+                "http://PRODUCT-SERVICE/product/"+ order.getProductId(),
+                ProductResponse.class
+        );
+        verify(restTemplate, times(1)).getForObject(
+                "http://PAYMENT-SERVICE/payment/order/" + order.getId(),
+                PaymentResponse.class
+        );
+
+        assertNotNull(orderResponse);
+        assertEquals(order.getId(), orderResponse.getOrderId());
 
     }
 
