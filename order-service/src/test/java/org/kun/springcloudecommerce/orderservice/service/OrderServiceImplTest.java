@@ -1,6 +1,5 @@
 package org.kun.springcloudecommerce.orderservice.service;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.kun.springcloudecommerce.orderservice.entity.Order;
@@ -16,7 +15,6 @@ import org.kun.springcloudecommerce.orderservice.model.PaymentMode;
 import org.kun.springcloudecommerce.orderservice.repository.OrderRepository;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.stubbing.Answer;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -109,6 +107,27 @@ public class OrderServiceImplTest {
         when(orderRepository.save(any(Order.class))).thenReturn(order);
         when(paymentService.doPayment(any(PaymentRequest.class)))
                 .thenReturn(new ResponseEntity<Long>(1l,HttpStatus.OK));
+
+        long orderId = orderService.placeOrder(orderRequest);
+
+        verify(orderRepository, times(2)).save(any(Order.class));
+        verify(productService, times(1)).reduceQuantity(anyLong(), anyLong());
+        verify(paymentService, times(1)).doPayment(any(PaymentRequest.class));
+
+        assertEquals(order.getId(), orderId);
+    }
+
+    @DisplayName("Place Order - Payment Failed Scenario")
+    @Test
+    void test_When_Place_Order_Payment_Failed_then_Order_Placed() {
+        OrderRequest orderRequest = getMockOrderRequest();
+        Order order = getMockOrder();
+
+        when(productService.reduceQuantity(anyLong(), anyLong()))
+                .thenReturn(new ResponseEntity<>(HttpStatus.OK));
+        when(orderRepository.save(any(Order.class))).thenReturn(order);
+        when(paymentService.doPayment(any(PaymentRequest.class)))
+                .thenThrow(new RuntimeException());
 
         long orderId = orderService.placeOrder(orderRequest);
 
