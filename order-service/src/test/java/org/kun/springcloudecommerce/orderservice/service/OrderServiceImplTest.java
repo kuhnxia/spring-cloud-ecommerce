@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.kun.springcloudecommerce.orderservice.entity.Order;
+import org.kun.springcloudecommerce.orderservice.exception.CustomException;
 import org.kun.springcloudecommerce.orderservice.external.client.PaymentService;
 import org.kun.springcloudecommerce.orderservice.external.client.ProductService;
 import org.kun.springcloudecommerce.orderservice.external.response.PaymentResponse;
@@ -15,13 +16,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.stubbing.Answer;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.Instant;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
@@ -76,6 +77,22 @@ public class OrderServiceImplTest {
         assertNotNull(orderResponse);
         assertEquals(order.getId(), orderResponse.getOrderId());
 
+    }
+
+    @DisplayName("Get Order - Failure Scenario")
+    @Test
+    void test_When_Get_Order_NOT_FOUND_Then_Not_Found() {
+        when(orderRepository.findById(anyLong()))
+                .thenReturn(Optional.ofNullable(null));
+
+        CustomException exception =
+                assertThrows(CustomException.class,
+                        ()-> orderService.getOrderDetails(1));
+
+        assertEquals("ORDER_NOT_FOUND", exception.getErrorCode());
+        assertEquals(HttpStatus.NOT_FOUND, exception.getStatus());
+
+        verify(orderRepository, times(1)).findById(anyLong());
     }
 
     private PaymentResponse getMockPaymentResponse() {
