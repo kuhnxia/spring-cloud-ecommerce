@@ -96,7 +96,7 @@ public class OrderServiceImpl implements OrderService{
 
         OrderResponse.ProductDetails productDetails =
                 OrderResponse.ProductDetails.builder()
-                        .productName(productResponse.getName())
+                        .productName(productResponse.getProductName())
                         .productId(productResponse.getProductId())
                         .price(productResponse.getPrice())
                         .build();
