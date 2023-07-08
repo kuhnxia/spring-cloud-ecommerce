@@ -14,6 +14,12 @@ Push images to docker.io
 docker push username/image:tag
 ````
 
+Before build
+
+````powershell
+mvn clean install
+````
+
 Build docker image example
 
 ````powershell
@@ -25,7 +31,7 @@ Run docker image example
 
 ````powershell
 docker run --name Eureka -d -p8761:8761 alexandersupertramp/serviceregistry:0.0.1
-docker run -d --name configserver -p9296:9296 -e EUREKA_SERVER_ADDRESS=http://host.docker.internal:8761/eureka alexandersupertramp/configserver:latest
-docker run -d --name cloudgateway -p9090:9090 -e CONFIG_SERVER_URL=host.docker.internal -e EUREKA_SERVER_ADDRESS=http://host.docker.internal:8761/eureka alexandersupertramp/cloudgateway:latest
+docker run -d --name configserver -p9296:9296 -e EUREKA_SERVER_URL=host.docker.internal alexandersupertramp/configserver:latest
+docker run -d --name cloudgateway -p9090:9090 -e CONFIG_SERVER_URL=host.docker.internal -e EUREKA_SERVER_URL=host.docker.internal alexandersupertramp/cloudgateway:latest
 ````
 
