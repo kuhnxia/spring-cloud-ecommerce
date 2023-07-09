@@ -1,0 +1,32 @@
+version: '3'
+services:
+  Eureka:
+    image: 'alexandersupertramp/serviceregistry:latest'
+    container_name: Eureka
+    ports:
+      - '8761:8761'
+  configserver:
+    image: 'alexandersupertramp/configserver:latest'
+    container_name: configserver
+    ports:
+      - '9296:9296'
+    environment:
+      - EUREKA_SERVER_URL=Eureka
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://configserver:9296/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    depends_on:
+      - Eureka
+  cloudgateway:
+    image: 'alexandersupertramp/cloudgateway:latest'
+    container_name: cloudgateway
+    ports:
+      - '9090:9090'
+    environment:
+      - EUREKA_SERVER_URL=Eureka
+      - CONFIG_SERVER_URL=configserver
+    depends_on:
+      configserver:
+        condition: service_healthy

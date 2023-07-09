@@ -35,3 +35,8 @@ docker run -d --name configserver -p9296:9296 -e EUREKA_SERVER_URL=host.docker.i
 docker run -d --name cloudgateway -p9090:9090 -e CONFIG_SERVER_URL=host.docker.internal -e EUREKA_SERVER_URL=host.docker.internal alexandersupertramp/cloudgateway:latest
 ````
 
+Run docker-compose example
+
+````powershell
+docker-compose -f docker-compose.yaml up 
+````
