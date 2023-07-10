@@ -40,3 +40,9 @@ Run docker-compose example
 ````powershell
 docker-compose -f docker-compose.yaml up 
 ````
+
+Auto build docker image by Jib Maven Plugin （Try different VPN if connection problem occur.
+
+````powershell
+mvn clean install jib:build
+````
