@@ -46,3 +46,22 @@ Auto build docker image by Jib Maven Plugin （Try different VPN if connection p
 ````powershell
 mvn clean install jib:build
 ````
+
+## Kubernetes
+
+Check information
+
+```powershell
+kubectl get all -o wide
+```
+
+Create deployment examples
+
+```powershell
+kubectl create deployment nginx --image=nginx
+```
+Get deployment details
+
+```powershell
+kubectl describe deployment nginx
+```
