@@ -65,3 +65,10 @@ Get deployment details
 ```powershell
 kubectl describe deployment nginx
 ```
+
+Inside the pod
+
+```
+kubectl exec -it nginx-748c667d99-hrlhf -- /bin/bash
+```
+
