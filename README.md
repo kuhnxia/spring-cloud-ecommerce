@@ -71,4 +71,12 @@ Inside the pod
 ```
 kubectl exec -it nginx-748c667d99-hrlhf -- /bin/bash
 ```
+Apply the yaml configuration
+```
+kubectl apply -f deploy.yaml -n myspace
+```
 
+Delete the yaml configuration
+```
+kubectl delete -f deploy.yaml
+```
