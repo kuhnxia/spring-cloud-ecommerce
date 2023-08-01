@@ -26,6 +26,9 @@ Build docker image example
 docker build -t alexandersupertramp/serviceregistry:0.0.1 -t alexandersupertramp/serviceregistry:latest .
 docker build -t alexandersupertramp/configserver:0.0.1 -t  alexandersupertramp/configserver:latest .
 docker build -t alexandersupertramp/cloudgateway:0.0.1 -t  alexandersupertramp/cloudgateway:latest .
+docker build -t alexandersupertramp/productservice:0.0.1 -t alexandersupertramp/productservice:latest .
+docker build -t alexandersupertramp/paymentservice:0.0.1 -t alexandersupertramp/paymentservice:latest .
+docker build -t alexandersupertramp/orderservice:0.0.1 -t alexandersupertramp/orderservice:latest .
 ````
 Run docker image example
 

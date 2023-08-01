@@ -30,3 +30,39 @@ services:
     depends_on:
       configserver:
         condition: service_healthy
+
+  productservice:
+    image: 'alexandersupertramp/productservice:latest'
+    container_name: productservice
+    ports:
+      - '8080:8080'
+    environment:
+      - EUREKA_SERVER_URL=http://Eureka:8761/eureka
+      - CONFIG_SERVER_URL=http://configserver:9296
+    depends_on:
+      configserver:
+        condition: service_healthy
+
+  paymentservice:
+    image: 'alexandersupertramp/paymentservice:latest'
+    container_name: paymentservice
+    ports:
+      - '8081:8081'
+    environment:
+      - EUREKA_SERVER_URL=http://Eureka:8761/eureka
+      - CONFIG_SERVER_URL=http://configserver:9296
+    depends_on:
+      configserver:
+        condition: service_healthy
+
+  orderservice:
+    image: 'alexandersupertramp/orderservice:latest'
+    container_name: orderservice
+    ports:
+      - '8082:8082'
+    environment:
+      - EUREKA_SERVER_URL=http://Eureka:8761/eureka
+      - CONFIG_SERVER_URL=http://configserver:9296
+    depends_on:
+      configserver:
+        condition: service_healthy
