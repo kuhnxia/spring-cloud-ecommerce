@@ -1,22 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cloud-gateway-app
+  name: order-service-app
 spec:
   selector:
     matchLabels:
-      app: cloud-gateway-app
+      app: order-service-app
   template:
     metadata:
       labels:
-        app: cloud-gateway-app
+        app: order-service-app
     spec:
       containers:
-      - name: cloud-gateway-app
-        image: alexandersupertramp/cloudgateway:latest
-        imagePullPolicy: Always
+      - name: order-service-app
+        image: alexandersupertramp/orderservice:latest
         ports:
-        - containerPort: 9090
+        - containerPort: 8082
         env:
           - name: EUREKA_SERVER_URL
             valueFrom:
@@ -28,18 +27,22 @@ spec:
               configMapKeyRef:
                 name: config-cm
                 key: config_url
+          - name: DB_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: mysql-cm
+                key: hostname
 
 ---
 
 apiVersion: v1
 kind: Service
 metadata:
-  name: cloud-gateway-svc
+  name: order-service-svc
 spec:
-  type: LoadBalancer
   selector:
-    app: cloud-gateway-app
+    app: order-service-app
   ports:
   - port: 80
-    targetPort: 9090
+    targetPort: 8082
 

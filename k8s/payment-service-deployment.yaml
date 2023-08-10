@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cloud-gateway-app
+  name: payment-service-app
 spec:
   selector:
     matchLabels:
-      app: cloud-gateway-app
+      app: payment-service-app
   template:
     metadata:
       labels:
-        app: cloud-gateway-app
+        app: payment-service-app
     spec:
       containers:
-      - name: cloud-gateway-app
-        image: alexandersupertramp/cloudgateway:latest
+      - name: payment-service-app
+        image: alexandersupertramp/paymentservice:latest
         imagePullPolicy: Always
         ports:
-        - containerPort: 9090
+        - containerPort: 8081
         env:
           - name: EUREKA_SERVER_URL
             valueFrom:
@@ -28,18 +28,23 @@ spec:
               configMapKeyRef:
                 name: config-cm
                 key: config_url
+          - name: DB_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: mysql-cm
+                key: hostname
+
 
 ---
 
 apiVersion: v1
 kind: Service
 metadata:
-  name: cloud-gateway-svc
+  name: payment-service-svc
 spec:
-  type: LoadBalancer
   selector:
-    app: cloud-gateway-app
+    app: payment-service-app
   ports:
   - port: 80
-    targetPort: 9090
+    targetPort: 8081
 
