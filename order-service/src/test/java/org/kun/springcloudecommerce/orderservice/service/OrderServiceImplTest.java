@@ -161,7 +161,7 @@ public class OrderServiceImplTest {
     private ProductResponse getMockProductResponse() {
         return ProductResponse.builder()
                 .productId(2)
-                .productName("iPhone")
+                .name("iPhone")
                 .price(100)
                 .quantity(200)
                 .build();
