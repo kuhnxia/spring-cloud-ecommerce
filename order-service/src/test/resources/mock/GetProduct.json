@@ -1,6 +1,6 @@
 {
   "productId": 1,
-  "productName": "iPhone",
+  "name": "iPhone",
   "quantity": 370,
   "price": 200
 }

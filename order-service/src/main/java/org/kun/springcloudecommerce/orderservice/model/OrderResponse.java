@@ -25,7 +25,7 @@ public class OrderResponse {
     @Builder
     public static class ProductDetails {
         private long productId;
-        private String productName;
+        private String name;
         private long price;
     }
 
