@@ -79,7 +79,16 @@ Apply the yaml configuration
 kubectl apply -f deploy.yaml -n myspace
 ```
 
+Apply the yaml folder
+```
+kubectl apply -f k8s
+```
+
 Delete the yaml configuration
 ```
-kubectl delete -f deploy.yaml
+kubectl delete -f deploy.yaml -n myspace
+```
+Get a tunnel for the service
+```
+minikube service eureka-lb
 ```
