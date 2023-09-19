@@ -20,8 +20,8 @@ public class TestServiceInstanceListSupplier implements ServiceInstanceListSuppl
 
         result.add(
                 new DefaultServiceInstance(
-                        "PAYMENT-SERVICE",
-                        "PAYMENT-SERVICE",
+                        "payment-service-svc",
+                        "payment-service-svc",
                         "localhost",
                         8080,
                         false
@@ -30,8 +30,8 @@ public class TestServiceInstanceListSupplier implements ServiceInstanceListSuppl
 
         result.add(
                 new DefaultServiceInstance(
-                        "PRODUCT-SERVICE",
-                        "PRODUCT-SERVICE",
+                        "product-service-svc",
+                        "product-service-svc",
                         "localhost",
                         8080,
                         false

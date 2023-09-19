@@ -12,6 +12,7 @@ import org.kun.springcloudecommerce.orderservice.model.OrderRequest;
 import org.kun.springcloudecommerce.orderservice.model.OrderResponse;
 import org.kun.springcloudecommerce.orderservice.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -29,6 +30,12 @@ public class OrderServiceImpl implements OrderService{
     private PaymentService paymentService;
     @Autowired
     private RestTemplate restTemplate;
+
+    @Value("%{microservices.product}")
+    private String productServiceUrl;
+
+    @Value("%{microservices.payment}")
+    private String paymentServiceUrl;
 
 
     @Override
@@ -84,13 +91,13 @@ public class OrderServiceImpl implements OrderService{
 
         log.info("Fetch the product information by product id: {}", order.getProductId());
         ProductResponse productResponse = restTemplate.getForObject(
-                "http://PRODUCT-SERVICE/product/"+ order.getProductId(),
+                productServiceUrl + order.getProductId(),
                 ProductResponse.class
         );
 
         log.info("Fetch the payment details by order id: {}", order.getId());
         PaymentResponse paymentResponse = restTemplate.getForObject(
-                "http://PAYMENT-SERVICE/payment/order/" + order.getId(),
+                paymentServiceUrl + "order/" + order.getId(),
                 PaymentResponse.class
         );
 
