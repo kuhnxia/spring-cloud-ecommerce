@@ -96,3 +96,9 @@ Get minikube dashboard
 ```
 minikube dashboard
 ```
+
+## WebBrowser
+Get token
+```
+http://127.0.0.1:54668/authenticate/login
+```
