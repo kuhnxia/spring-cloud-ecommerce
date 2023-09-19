@@ -92,3 +92,7 @@ Get a tunnel for the service
 ```
 minikube service eureka-lb
 ```
+Get minikube dashboard
+```
+minikube dashboard
+```
