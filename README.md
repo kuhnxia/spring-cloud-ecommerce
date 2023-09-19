@@ -17,7 +17,7 @@ docker push username/image:tag
 Before build
 
 ````powershell
-mvn clean install
+mvn clean install (-DskipTests)
 ````
 
 Build docker image example
